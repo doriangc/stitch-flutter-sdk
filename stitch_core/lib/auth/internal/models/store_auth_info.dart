@@ -64,9 +64,11 @@ writeActiveUserAuthInfoToStorage(AuthInfo authInfo, Storage storage) {
   }
 
   List<StoreStitchUserIdentity> identities = [];
-  authInfo.userProfile.identities.forEach((obj) {
-    identities.add(StoreStitchUserIdentity(obj.id, obj.providerType));
-  });
+  if (authInfo.userProfile != null) {
+    authInfo.userProfile.identities.forEach((obj) {
+      identities.add(StoreStitchUserIdentity(obj.id, obj.providerType));
+    });
+  }
 
   StoreAuthInfo info = StoreAuthInfo(
       authInfo.userId,

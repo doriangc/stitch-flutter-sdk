@@ -14,18 +14,18 @@ class StoreCoreUserProfile extends StitchUserProfileImpl {
   final List<StoreStitchUserIdentity> identities;
 
   static StoreCoreUserProfile decode(Map<String, dynamic> from) {
-    List<StoreStitchUserIdentity> identities = [];
+    if (from == null) return null;
 
+    List<StoreStitchUserIdentity> identities = [];
+    
     from[Fields.IDENTITIES].forEach((obj) {
       identities.add(StoreStitchUserIdentity.decode(obj));
     });
 
-    return from != null
-        ? new StoreCoreUserProfile(
+    return new StoreCoreUserProfile(
             from[Fields.USER_TYPE],
             from[Fields.DATA],
-            identities)
-        : null;
+            identities);
   }
 
   /// New class for storing core user profile.

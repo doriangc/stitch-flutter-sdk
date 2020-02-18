@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:stitch_core/stitch_exception.dart';
 
+import '../../internal/common/bson.dart' show eJsonDecode;
 import '../../internal/common/codec.dart' show Decoder;
 import '../../internal/common/storage.dart' show Storage;
 import '../../internal/net/event_stream.dart' show EventStream;
@@ -167,7 +168,7 @@ abstract class CoreStitchAuth<TStitchUser extends CoreStitchUser> implements Sti
   ) async {
     var response = await doAuthenticatedRequest(stitchReq);
 
-    var obj = json.decode(response.body);
+    var obj = eJsonDecode(json.decode(response.body));
 
     if (decoder != null) {
       return decoder.decode(obj);
@@ -355,6 +356,7 @@ abstract class CoreStitchAuth<TStitchUser extends CoreStitchUser> implements Sti
 
   Future<void> logoutUserWithIdInternal(String userId) async {
     AuthInfo authInfo = this.allUsersAuthInfo[userId];
+    
     if (authInfo == null) {
       // return Promise.reject(
       //   new StitchClientError(StitchClientErrorCode.UserNotFound)
@@ -381,9 +383,6 @@ abstract class CoreStitchAuth<TStitchUser extends CoreStitchUser> implements Sti
       }
     };
 
-    /// Promise.finally needs to be added as a shim
-    /// to TS. Until we need another .finally, we
-    /// will need this workaround for cleanup
     try {
       await _doLogout(authInfo);
       clearAuthBlock();

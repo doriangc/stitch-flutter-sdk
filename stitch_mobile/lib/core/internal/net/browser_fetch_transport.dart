@@ -15,6 +15,8 @@ class BrowserFetchTransport implements Transport {
       httpRequest.headers[key] = value;
     });
 
+    // httpRequest.
+
     http.Response response = await http.Response.fromStream(await httpRequest.send());
     
     return Response(response.headers, response.statusCode, response.body);
