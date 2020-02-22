@@ -23,21 +23,21 @@ abstract class BaseStitchRequestClient {
   BaseStitchRequestClient(this.baseUrl, this.transport);
 
   Future<Response> doRequestToURL(StitchRequest stitchReq, String url) async {
-    print('============== Request =====================');
-    print('url: $url');
-    print('headers: ${stitchReq.headers}');
-    print('body: ${stitchReq.body}');
-    print('path: ${stitchReq.path}');
-    print('method: ${stitchReq.method}');
-    print('============================================');
+    // print('============== Request =====================');
+    // print('url: $url');
+    // print('headers: ${stitchReq.headers}');
+    // print('body: ${stitchReq.body}');
+    // print('path: ${stitchReq.path}');
+    // print('method: ${stitchReq.method}');
+    // print('============================================');
 
     try {
       Response response = await transport.roundTrip(_buildRequest(stitchReq, url));
       
-      print('============== Response =====================');
-      print('body: ${response.body}');
-      print('headers: ${response.headers}');
-      print('============================================');
+      // print('============== Response =====================');
+      // print('body: ${response.body}');
+      // print('headers: ${response.headers}');
+      // print('============================================');
 
       return inspectResponse(stitchReq, url, response);
     } catch (e) {

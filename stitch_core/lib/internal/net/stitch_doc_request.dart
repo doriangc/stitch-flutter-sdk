@@ -45,7 +45,7 @@ class StitchDocRequestBuilder extends StitchRequestBuilder {
     }
 
     this.headers[Headers.CONTENT_TYPE] = ContentTypes.APPLICATION_JSON;
-    print(document);
+    // print(document);
     this.withBody(json.encode(this.document));
     return new StitchDocRequest(super.build(), this.document);
   }

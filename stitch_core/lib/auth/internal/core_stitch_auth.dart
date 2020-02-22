@@ -223,7 +223,7 @@ abstract class CoreStitchAuth<TStitchUser extends CoreStitchUser>
 
   /// Attempts to refresh the current access token.
   Future<void> refreshAccessToken() async {
-    print('attempting access token refresh....');
+    // print('attempting access token refresh....');
     StitchAuthRequestBuilder reqBuilder = StitchAuthRequestBuilder()
         .withRefreshToken()
         .withPath(authRoutes.sessionRoute)
@@ -535,7 +535,7 @@ abstract class CoreStitchAuth<TStitchUser extends CoreStitchUser>
   /// Checks if the current access token is expired or going to expire soon, and refreshes the access token if
   /// necessary
   Future<void> tryRefreshAccessToken(num reqStartedAt) async {
-    print('Trying to refresh token');
+    // print('Trying to refresh token');
 
     /// Use this critical section to create a queue of pending outbound requests
     /// that should wait on the result of doing a token refresh or logout. This will
