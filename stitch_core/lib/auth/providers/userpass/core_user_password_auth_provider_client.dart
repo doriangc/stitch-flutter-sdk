@@ -35,8 +35,8 @@ class CoreUserPasswordAuthProviderClient extends CoreAuthProviderClient<StitchRe
       .withMethod('POST')
       .withPath(_getRegisterWithEmailRoute());
     reqBuilder.withDocument({
-      [RegistrationFields.EMAIL]: email,
-      [RegistrationFields.PASSWORD]: password
+      RegistrationFields.EMAIL: email,
+      RegistrationFields.PASSWORD: password
     });
     await this.requestClient.doRequest(reqBuilder.build());
   }
@@ -45,8 +45,8 @@ class CoreUserPasswordAuthProviderClient extends CoreAuthProviderClient<StitchRe
     StitchDocRequestBuilder reqBuilder = StitchDocRequestBuilder();
     reqBuilder.withMethod('POST').withPath(_getConfirmUserRoute());
     reqBuilder.withDocument({
-      [ActionFields.TOKEN]: token,
-      [ActionFields.TOKEN_ID]: tokenId
+      ActionFields.TOKEN: token,
+      ActionFields.TOKEN_ID: tokenId
     });
     await this.requestClient.doRequest(reqBuilder.build());
   }
@@ -56,7 +56,7 @@ class CoreUserPasswordAuthProviderClient extends CoreAuthProviderClient<StitchRe
     reqBuilder
       .withMethod('POST')
       .withPath(_getResendConfirmationEmailRoute());
-    reqBuilder.withDocument({ [ActionFields.EMAIL]: email });
+    reqBuilder.withDocument({ActionFields.EMAIL: email });
     await this.requestClient.doRequest(reqBuilder.build());
   }
 
@@ -68,9 +68,9 @@ class CoreUserPasswordAuthProviderClient extends CoreAuthProviderClient<StitchRe
     StitchDocRequestBuilder reqBuilder = StitchDocRequestBuilder();
     reqBuilder.withMethod('POST').withPath(_getResetPasswordRoute());
     reqBuilder.withDocument({
-      [ActionFields.TOKEN]: token,
-      [ActionFields.TOKEN_ID]: tokenId,
-      [ActionFields.PASSWORD]: password
+      ActionFields.TOKEN: token,
+      ActionFields.TOKEN_ID: tokenId,
+      ActionFields.PASSWORD: password
     });
     await this.requestClient.doRequest(reqBuilder.build());
   }
@@ -80,7 +80,7 @@ class CoreUserPasswordAuthProviderClient extends CoreAuthProviderClient<StitchRe
     reqBuilder
       .withMethod('POST')
       .withPath(_getSendResetPasswordEmailRoute());
-    reqBuilder.withDocument({ [ActionFields.EMAIL]: email });
+    reqBuilder.withDocument({ActionFields.EMAIL: email });
     await this.requestClient.doRequest(reqBuilder.build());
   }
 
@@ -90,9 +90,9 @@ class CoreUserPasswordAuthProviderClient extends CoreAuthProviderClient<StitchRe
       .withMethod('POST')
       .withPath(_getCallResetPasswordFunctionRoute());
     reqBuilder.withDocument({
-      [ActionFields.EMAIL]: email,
-      [ActionFields.PASSWORD]: password,
-      [ActionFields.ARGS]: args
+      ActionFields.EMAIL: email,
+      ActionFields.PASSWORD: password,
+      ActionFields.ARGS: args
     });
     await this.requestClient.doRequest(reqBuilder.build());
   }

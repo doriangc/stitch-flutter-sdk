@@ -1,4 +1,4 @@
-import 'package:stitch_core/stitch_core.dart' show ActiveUserChanged, AuthEvent, AuthEventKind, AuthInfo, CoreStitchAuth, CoreStitchUser, DeviceFields, ListenerRegistered, StitchAppClientInfo, StitchAppRequestClient, StitchCredential, Storage, UserAdded, UserLinked, UserLoggedIn, UserLoggedOut, UserRemoved;
+import 'package:stitch_core/stitch_core.dart' show ActiveUserChanged, AuthEvent, AuthEventKind, AuthInfo, CoreStitchAuth, CoreStitchUser, DeviceFields, ListenerRegistered, StitchAppClientInfo, StitchAppRequestClient, StitchCredential, StitchRequestClient, Storage, UserAdded, UserLinked, UserLoggedIn, UserLoggedOut, UserRemoved;
 
 import '../providers/internal/auth_provider_client_factory.dart' show AuthProviderClientFactory;
 import '../stitch_auth.dart' show StitchAuth;
@@ -37,7 +37,7 @@ class StitchAuthImpl extends CoreStitchAuth<StitchUser> implements StitchAuth {
     [String providerName]
   ) {
     if (isAuthProviderClientFactory(clientFactory)) {
-      return clientFactory.getClient(this, this.requestClient, this.authRoutes);
+      return clientFactory.getClient(this, this.requestClient as StitchRequestClient, this.authRoutes);
     } else {
       return clientFactory.getNamedClient(
         providerName,

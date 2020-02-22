@@ -15,7 +15,7 @@ class StitchRequestClient extends BaseStitchRequestClient {
     return super.doStreamRequestToURL(stitchReq, this.baseUrl, open: open, retryRequest: retryRequest);
   }
 
-  String getBaseURL() {
+  Future<String> getBaseURL() async {
     return this.baseUrl;
   }
 }

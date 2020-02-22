@@ -1,7 +1,7 @@
 import 'dart:convert';
 
+import '../../stitch_service_exception.dart';
 import '../net/response.dart';
-import '../../stitch_exception.dart';
 import '../../internal/net/headers.dart';
 import '../net/content_types.dart';
 
@@ -15,13 +15,20 @@ class Fields {
 /// recognized, this will throw a StitchServiceError with the "UNKNOWN" error code.
 handleRequestError(Response response) {
   if (response.body == null) {
-    throw StitchException('Received unexpected status code ${response.statusCode}');
+    throw StitchServiceException('Received unexpected status code ${response.statusCode}');
   }
   
-  String body = response.body;
+  String body;
+  try {
+    body = response.body;
+  } catch (e) {
+    throw StitchServiceException('Received unexpected status code ${response.statusCode}');
+  }
+
   String errorMsg = _handleRichError(response, body);
 
-  throw new StitchException(errorMsg);
+  // throw new StitchException(errorMsg);
+  throw new StitchServiceException(errorMsg);
 }
 
 /// Private helper method which decodes the Stitch error from the body of an HTTP `Response`
@@ -51,5 +58,5 @@ String _handleRichError(Response response, String body){
 
   var errorCode = bsonObj[Fields.ERROR_CODE];
 
-  return '$errorMsg Error Code $errorCode';
+  return errorMsg;
 }

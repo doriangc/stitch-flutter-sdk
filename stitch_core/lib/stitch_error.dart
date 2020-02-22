@@ -1,7 +1,7 @@
-class StitchException implements Exception {    
+class StitchError extends Error {    
   String _message;
 
-  StitchException([String message = 'Stitch Exception']) {
+  StitchError([String message = 'Stitch Exception']) {
     this._message = message;
   }
 

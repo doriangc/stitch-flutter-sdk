@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:stitch_core/internal/net/stitch_request_client.dart';
+
 import './api_app_metadata.dart' show ApiAppMetadata;
 import './base_stitch_request_client.dart' show BaseStitchRequestClient;
 import './event_stream.dart' show EventStream;
@@ -9,7 +11,7 @@ import './stitch_request.dart' show StitchRequest, StitchRequestBuilder;
 import './transport.dart' show Transport;
 
 
-class StitchAppRequestClient extends BaseStitchRequestClient {
+class StitchAppRequestClient extends StitchRequestClient {
   final String _clientAppId;
   final StitchAppRoutes _routes;
 
