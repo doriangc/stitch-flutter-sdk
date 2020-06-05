@@ -119,15 +119,14 @@ abstract class CoreStitchAuth<TStitchUser extends CoreStitchUser>
   // Temporary workaround TODO: Fix
   Future<void> initProcess() async {
     Map<String, AuthInfo> allUsersAuthInfo;
-    // try {
+    try {
       allUsersAuthInfo = await readCurrentUsersFromStorage(storage);
-    // } catch (e) {
-      // print(e);
-      // throw StitchClientException(
-        // StitchClientExceptionCode.couldNotLoadPersistedAuthInfo,
-      // );
+    } catch (e) {
+      throw StitchClientException(
+        StitchClientExceptionCode.couldNotLoadPersistedAuthInfo,
+      );
       // throw StitchException('CouldNotLoadPersistedAuthInfo');
-    // }
+    }
     this.allUsersAuthInfo = allUsersAuthInfo;
 
     // AuthInfo activeUserAuthInfo;
