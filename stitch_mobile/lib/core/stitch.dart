@@ -1,4 +1,5 @@
 import 'package:stitch_core/stitch_core.dart' show StitchAppClientConfiguration, StitchAppClientConfigurationBuilder;
+import 'package:stitch_mobile/core/internal/net/browser_fetch_stream_transport.dart';
 import './internal/common/local_storage.dart' show LocalStorage;
 import './internal/net/browser_fetch_transport.dart' show BrowserFetchTransport;
 import 'stitch_app_client.dart' show StitchAppClient;
@@ -27,10 +28,10 @@ abstract class Stitch {
 
   /// Retrieves the default [StitchAppClient] associated with the application.
   static StitchAppClient get defaultAppClient {
-    if (Stitch.defaultClientAppId == null) {
+    if (defaultClientAppId == null) {
       throw 'default app client has not yet been initialized/set';
     }
-    return appClients[Stitch.defaultClientAppId];
+    return appClients[defaultClientAppId];
   }
 
   /// Retrieves the [StitchAppClient] associated with the specified clientAppId.
@@ -49,22 +50,22 @@ abstract class Stitch {
 
   /// Initializes the default [StitchAppClient] associated with the specified
   /// clientAppId.
-  static StitchAppClient initializeDefaultAppClient(String clientAppId) {
+  static Future<StitchAppClient> initializeDefaultAppClient(String clientAppId) async {
     if (clientAppId == null || clientAppId == '') {
       throw 'clientAppId must be set to a non-empty string';
     }
-    if (Stitch.defaultClientAppId != null) {
-      throw 'default app can only be set once; currently set to ${Stitch.defaultClientAppId}';
+    if (defaultClientAppId != null) {
+      throw 'default app can only be set once; currently set to $defaultClientAppId';
     }
 
-    StitchAppClient client = Stitch.initializeAppClient(clientAppId);
-    Stitch.defaultClientAppId = clientAppId;
+    StitchAppClient client = await initializeAppClient(clientAppId);
+    defaultClientAppId = clientAppId;
     return client;
   }
 
   /// Initializes a new, non-default [StitchAppClient] associated with the 
   /// application.
-  static StitchAppClient initializeAppClient(String clientAppId, [StitchAppClientConfiguration config]) {
+  static Future<StitchAppClient> initializeAppClient(String clientAppId, [StitchAppClientConfiguration config]) async {
     if (config == null) {
       config = StitchAppClientConfigurationBuilder().build();
     }
@@ -79,10 +80,12 @@ abstract class Stitch {
     // builder will be passed into [StitchAppClientImpl]
     StitchAppClientConfigurationBuilder builder = config.builder();
 
+    print('Preparing to link Storage');
     // apply defaults to builder
     if (builder.storage == null) {
       builder.withStorage(LocalStorage(clientAppId));
     }
+    print('Done linking storage');
     if (builder.transport == null) {
       // Use the EventSource-streaming compatible transport if the browser
       // supports it, otherwise use a vanilla FetchTransport that will fail on
@@ -91,19 +94,22 @@ abstract class Stitch {
         // builder.withTransport(new BrowserFetchStreamTransport());  
       // } else {
         builder.withTransport(BrowserFetchTransport());
+        // builder.withTransport(BrowserFetchStreamTransport());
       // }
     }
     if (builder.baseUrl == null || builder.baseUrl == '') {
       builder.withBaseUrl(DEFAULT_BASE_URL);
     }
     if (builder.localAppName == null || builder.localAppName == '') {
-      builder.withLocalAppName(Stitch.localAppName);
+      builder.withLocalAppName(localAppName);
     }
     if (builder.localAppVersion == null || builder.localAppVersion == '') {
-      builder.withLocalAppVersion(Stitch.localAppVersion);
+      builder.withLocalAppVersion(localAppVersion);
     }
 
     StitchAppClientImpl client = StitchAppClientImpl(clientAppId, builder.build());
+    await client.auth.initProcess();
+
     appClients[clientAppId] = client;
     return client;
   }

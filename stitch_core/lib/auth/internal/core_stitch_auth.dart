@@ -119,13 +119,15 @@ abstract class CoreStitchAuth<TStitchUser extends CoreStitchUser>
   // Temporary workaround TODO: Fix
   Future<void> initProcess() async {
     Map<String, AuthInfo> allUsersAuthInfo;
-    try {
+    // try {
       allUsersAuthInfo = await readCurrentUsersFromStorage(storage);
-    } catch (e) {
-      throw StitchClientException(
-          StitchClientExceptionCode.couldNotLoadPersistedAuthInfo);
+    // } catch (e) {
+      // print(e);
+      // throw StitchClientException(
+        // StitchClientExceptionCode.couldNotLoadPersistedAuthInfo,
+      // );
       // throw StitchException('CouldNotLoadPersistedAuthInfo');
-    }
+    // }
     this.allUsersAuthInfo = allUsersAuthInfo;
 
     // AuthInfo activeUserAuthInfo;
@@ -136,7 +138,8 @@ abstract class CoreStitchAuth<TStitchUser extends CoreStitchUser>
       // 'Could Not Load Persisted Auth Info!'
       // );
       throw StitchClientException(
-          StitchClientExceptionCode.couldNotLoadPersistedAuthInfo);
+        StitchClientExceptionCode.couldNotLoadPersistedAuthInfo,
+      );
     }
 
     activeUserAuthInfo =
@@ -168,10 +171,12 @@ abstract class CoreStitchAuth<TStitchUser extends CoreStitchUser>
   /// info is not currently logged in.
   Future<Response> doAuthenticatedRequest(StitchAuthRequest stitchReq,
       [AuthInfo authInfo]) async {
-    return await requestClient.doRequest(
-        prepareAuthRequest(stitchReq, authInfo ?? this.activeUserAuthInfo)).catchError((err){
-           _handleAuthFailure(err, stitchReq);
-        });
+    return await requestClient
+        .doRequest(
+            prepareAuthRequest(stitchReq, authInfo ?? this.activeUserAuthInfo))
+        .catchError((err) {
+      _handleAuthFailure(err, stitchReq);
+    });
   }
 
   /// Performs an authenticated request to the Stitch server with a JSON body, and decodes the extended JSON response into
@@ -198,26 +203,29 @@ abstract class CoreStitchAuth<TStitchUser extends CoreStitchUser>
           StitchClientExceptionCode.mustAuthenticateFirst);
     }
 
+    print(stitchReq.useRefreshToken);
+
     String authToken = stitchReq.useRefreshToken
         ? activeUserAuthInfo.refreshToken
         : activeUserAuthInfo.accessToken;
 
-    return await requestClient
-        .doStreamRequest(
-            stitchReq
-                .builder()
-                .withPath('${stitchReq.path}&stitch_at=${authToken}')
-                .build(),
-            open: open,
-            retryRequest: () => openAuthenticatedEventStream(stitchReq, false))
-        .catchError((err) {
-      this._handleAuthFailureForEventStream(stitchReq, open: open);
-    });
+    return await requestClient.doStreamRequest(
+        stitchReq
+            .builder()
+            .withPath('${stitchReq.path}&stitch_at=$authToken')
+            .build(),
+        open: open,
+        retryRequest: () => openAuthenticatedEventStream(stitchReq, false));
+    // .catchError((err) {
+    // this._handleAuthFailureForEventStream(stitchReq, open: open);
+    // });
   }
 
   Future<Stream<T>> openAuthenticatedStreamWithDecoder<T>(
       StitchAuthRequest stitchReq, Decoder<T> decoder) async {
     EventStream eventStream = await openAuthenticatedEventStream(stitchReq);
+    print('EVENTSTREAM ---- ');
+    print(eventStream);
     return Stream<T>(eventStream, decoder);
   }
 
@@ -479,7 +487,8 @@ abstract class CoreStitchAuth<TStitchUser extends CoreStitchUser>
   StitchRequest prepareAuthRequest(
       StitchAuthRequest stitchReq, AuthInfo authInfo) {
     if (!authInfo.isLoggedIn) {
-      throw StitchClientException(StitchClientExceptionCode.mustAuthenticateFirst);
+      throw StitchClientException(
+          StitchClientExceptionCode.mustAuthenticateFirst);
       // throw StitchException('MustAuthenticateFirst');
     }
 
@@ -515,7 +524,8 @@ abstract class CoreStitchAuth<TStitchUser extends CoreStitchUser>
   /// Stitch session, it will handle the error by attempting to refresh the access token if it hasn't been attempted
   /// already. If the error is not a Stitch error, or the error is a Stitch error not related to an invalid session,
   /// it will be re-thrown.
-  Future<Response> _handleAuthFailure(StitchException err, StitchAuthRequest req) async {
+  Future<Response> _handleAuthFailure(
+      StitchException err, StitchAuthRequest req) async {
     if (!(err is StitchServiceException)) {
       throw err;
     }

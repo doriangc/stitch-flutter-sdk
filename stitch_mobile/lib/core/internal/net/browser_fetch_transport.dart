@@ -8,7 +8,6 @@ import 'package:stitch_core/stitch_request_exception.dart';
 class BrowserFetchTransport implements Transport {
   Future<Response> roundTrip(BasicRequest request) async {
     http.Request httpRequest = http.Request(
-      
       request.method,
       Uri.parse(request.url)
     );
@@ -34,7 +33,7 @@ class BrowserFetchTransport implements Transport {
     return Response(response.headers, response.statusCode, response.body);
   }
 
-  Future<EventStream> stream(BasicRequest request, {bool open = true, Future<EventStream> retryRequest()}) {
+  Future<EventStream> stream(BasicRequest request, [open = true, Future<EventStream> Function() retryRequest]) {
     throw 'Streaming is not currently supported in the Dart Stitch SDK.';
   }
 }

@@ -45,7 +45,8 @@ class StitchAppClientConfigurationBuilder
   }
 
   StitchAppClientConfigurationBuilder withLocalAppVersion(
-      String localAppVersion) {
+    String localAppVersion,
+  ) {
     this.localAppVersion = localAppVersion;
     return this;
   }
@@ -53,6 +54,9 @@ class StitchAppClientConfigurationBuilder
   StitchAppClientConfiguration build() {
     StitchClientConfiguration config = super.build();
     return new StitchAppClientConfiguration(
-        config, this.localAppName, this.localAppVersion);
+      config,
+      this.localAppName,
+      this.localAppVersion,
+    );
   }
 }

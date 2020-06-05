@@ -15,8 +15,8 @@ class StitchAuthRequest extends StitchRequest {
 }
 
 class StitchAuthRequestBuilder extends StitchRequestBuilder {
-  bool useRefreshToken;
-  bool shouldRefreshOnFailure;
+  bool useRefreshToken = false;
+  bool shouldRefreshOnFailure = true;
 
   StitchAuthRequestBuilder([StitchAuthRequest request]) : super(request);
 

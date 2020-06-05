@@ -123,7 +123,7 @@ abstract class RemoteMongoCollection<DocumentT> {
   ///
   /// Defining the match expression to filter ChangeEvents is similar to
   /// defining the match expression for [triggers](https://docs.mongodb.com/stitch/triggers/database-triggers/).
-  Future<Stream<ChangeEvent<DocumentT>>> watch(dynamic arg);
+  Future<Stream<ChangeEvent<DocumentT>>> watch([dynamic arg]);
 
   /// Opens a MongoDB change stream against the collection to watch for changes 
   /// made to specific documents. The documents to watch must be explicitly 

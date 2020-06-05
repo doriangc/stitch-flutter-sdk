@@ -138,7 +138,7 @@ class RemoteMongoCollectionImpl<DocumentT> implements RemoteMongoCollection<Docu
     return _proxy.updateMany(query, update, updateOptions);
   }
 
-  Future<Stream<ChangeEvent<DocumentT>>> watch(dynamic arg) {
+  Future<Stream<ChangeEvent<DocumentT>>> watch([dynamic arg]) {
     return _proxy.watch(arg);
   }
 

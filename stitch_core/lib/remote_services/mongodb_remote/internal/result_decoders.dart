@@ -226,8 +226,13 @@ class ResultDecoders {
 
   // These decoders are not instantiated here, since each decoder has its own 
   // decoder for the full document type, which may differ for each collection.
-  static var ChangeEventDecoder;
-  static var CompactChangeEventDecoder;
+  static getChangeEventDecoder(Decoder<dynamic> decoder) {
+    return ChangeEventDecoder(decoder);
+  }
+
+  static getCompactChangeEventDecoder(Decoder<dynamic> decoder){
+    return CompactChangeEventDecoder(decoder);
+  }
 }
 
 class BaseChangeEventFields<T> {

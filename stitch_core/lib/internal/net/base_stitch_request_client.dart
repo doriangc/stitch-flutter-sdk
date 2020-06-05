@@ -51,7 +51,7 @@ abstract class BaseStitchRequestClient {
 
   Future<EventStream> doStreamRequestToURL(StitchRequest stitchReq, String url, {open = true, Future<EventStream> retryRequest()}) {
     try {
-      return transport.stream(_buildRequest(stitchReq, url), open: open, retryRequest: retryRequest);
+      return transport.stream(_buildRequest(stitchReq, url), open, retryRequest);
     } catch(e) {
       throw StitchTransportException(e);
     }

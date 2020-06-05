@@ -393,7 +393,7 @@ class CoreRemoteMongoCollectionImpl<T> implements CoreRemoteMongoCollection<T> {
     return _service.streamFunction(
       "watch",
       [args],
-      ResultDecoders.ChangeEventDecoder(_codec)
+      ResultDecoders.getChangeEventDecoder(_codec)
     );
   }
 
@@ -408,7 +408,7 @@ class CoreRemoteMongoCollectionImpl<T> implements CoreRemoteMongoCollection<T> {
     return _service.streamFunction(
       "watch",
       [args],
-      ResultDecoders.CompactChangeEventDecoder(_codec)
+      ResultDecoders.getCompactChangeEventDecoder(_codec)
     );
   }
 
